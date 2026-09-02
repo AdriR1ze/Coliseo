@@ -1,0 +1,29 @@
+[gd_scene format=3 uid="uid://cm77j5msernhq"]
+
+[ext_resource type="Script" uid="uid://dtf0a4t41wy2q" path="res://main_game.gd" id="1"]
+[ext_resource type="Script" uid="uid://dprl5b6hos5t7" path="res://ui/hud.gd" id="2"]
+
+[node name="MainGame" type="Node" unique_id=332859586]
+script = ExtResource("1")
+
+[node name="World" type="Node3D" parent="." unique_id=1553317847]
+
+[node name="LevelRoot" type="Node3D" parent="World" unique_id=178624542]
+unique_name_in_owner = true
+
+[node name="EntityRoot" type="Node3D" parent="World" unique_id=1882888779]
+unique_name_in_owner = true
+
+[node name="EffectsRoot" type="Node3D" parent="World" unique_id=1615422544]
+unique_name_in_owner = true
+
+[node name="HudLayer" type="CanvasLayer" parent="." unique_id=2006265395]
+
+[node name="HudRoot" type="Control" parent="HudLayer" unique_id=412379008]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2")

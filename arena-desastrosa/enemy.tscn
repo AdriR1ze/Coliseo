@@ -1,0 +1,19 @@
+[gd_scene format=3 uid="uid://d0yrcyutvsi1f"]
+
+[ext_resource type="Script" uid="uid://32x3iyvtv7cm" path="res://enemy.gd" id="1_7k104"]
+[ext_resource type="Script" uid="uid://dsnlix81mppbn" path="res://models/character_model.gd" id="2_model"]
+[ext_resource type="PackedScene" path="res://models/character_model.glb" id="3_glb"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_o2tjt"]
+radius = 0.4
+height = 1.8
+
+[node name="Enemy" type="CharacterBody3D" groups=["dancers", "enemies"]]
+script = ExtResource("1_7k104")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("CapsuleShape3D_o2tjt")
+
+[node name="CharacterModel" parent="." instance=ExtResource("3_glb")]
+script = ExtResource("2_model")

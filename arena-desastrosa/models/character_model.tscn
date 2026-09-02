@@ -1,0 +1,99 @@
+[gd_scene format=3 uid="uid://dkn63a8vx1qpm"]
+
+[ext_resource type="PackedScene" uid="uid://goc0tbmhwq2g" path="res://models/character_model.glb" id="2_glb"]
+
+[sub_resource type="GDScript" id="GDScript_th1g7"]
+script/source = "class_name CharacterModel
+extends Node3D
+
+signal animation_finished(anim_name: StringName)
+
+const ANIM_IDLE := \"idle\"
+const ANIM_WALK := \"walking\"
+const ANIM_RUN := \"running\"
+const ANIM_DANCE := \"boom_dance\"
+const ANIM_ATTACK := \"attack\"
+const ANIM_DEAD := \"dead\"
+
+var animation_player: AnimationPlayer = null
+var mesh_instance: MeshInstance3D = null
+var current_anim: String = \"\"
+
+func _ready() -> void:
+	_find_nodes()
+	if animation_player:
+		animation_player.animation_finished.connect(_on_animation_finished)
+
+func _find_nodes() -> void:
+	if has_node(\"AnimationPlayer\"):
+		animation_player = get_node(\"AnimationPlayer\")
+	else:
+		for child in find_children(\"*\", \"AnimationPlayer\", true, false):
+			animation_player = child as AnimationPlayer
+			break
+
+	if has_node(\"Armature/Skeleton3D/char1\"):
+		mesh_instance = get_node(\"Armature/Skeleton3D/char1\")
+	else:
+		for child in find_children(\"*\", \"MeshInstance3D\", true, false):
+			mesh_instance = child as MeshInstance3D
+			break
+
+func _resolve_anim_name(target_name: String) -> String:
+	if not animation_player:
+		return \"\"
+	if animation_player.has_animation(target_name):
+		return target_name
+	var list := animation_player.get_animation_list()
+	for a in list:
+		if a.ends_with(\"/\" + target_name) or a.to_lower() == target_name.to_lower():
+			return a
+	for a in list:
+		if target_name.to_lower() in a.to_lower():
+			return a
+	return \"\"
+
+func play_animation(anim_name: String, blend: float = 0.2) -> void:
+	if not animation_player:
+		_find_nodes()
+	if not animation_player:
+		return
+	if current_anim == anim_name and animation_player.is_playing():
+		return
+	var resolved := _resolve_anim_name(anim_name)
+	if resolved != \"\":
+		current_anim = anim_name
+		animation_player.play(resolved, blend)
+
+func play_idle() -> void:
+	play_animation(ANIM_IDLE)
+
+func play_walk() -> void:
+	play_animation(ANIM_WALK)
+
+func play_run() -> void:
+	play_animation(ANIM_RUN)
+
+func play_dance() -> void:
+	play_animation(ANIM_DANCE)
+
+func play_attack() -> void:
+	play_animation(ANIM_ATTACK)
+
+func play_dead() -> void:
+	play_animation(ANIM_DEAD)
+
+func is_dancing() -> bool:
+	return current_anim == ANIM_DANCE and animation_player != null and animation_player.is_playing()
+
+func is_dead() -> bool:
+	return current_anim == ANIM_DEAD
+
+func _on_animation_finished(anim_name: StringName) -> void:
+	animation_finished.emit(anim_name)
+"
+
+[node name="CharacterModel" type="Node3D" unique_id=584194970]
+script = SubResource("GDScript_th1g7")
+
+[node name="ModelRoot" parent="." unique_id=1521927406 instance=ExtResource("2_glb")]
