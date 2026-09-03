@@ -17,3 +17,12 @@ func crear_arma() -> BaseArma:
 
 func describir() -> String:
 	return "%s (Salud: %d, Velocidad: %.1f)" % [nombre, salud_maxima, velocidad]
+var comando_v: RefCounted = null
+
+func _init() -> void:
+	comando_v = preload("res://clases/comandos/comando_explosion_fuego.gd").new()
+
+## Command Pattern: Ejecuta la acción especial asignada a la tecla V.
+func v_command(usuario: Node3D = null) -> void:
+	if comando_v and comando_v.has_method("execute"):
+		comando_v.execute(usuario)

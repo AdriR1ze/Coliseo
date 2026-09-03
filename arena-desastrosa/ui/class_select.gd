@@ -8,6 +8,12 @@ func _ready() -> void:
 	_construir_ui()
 
 func _construir_ui() -> void:
+	# Fondo oscuro de la pantalla de selección
+	var fondo := ColorRect.new()
+	fondo.color = Color(0.07, 0.08, 0.12)
+	fondo.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
+	add_child(fondo)
+
 	var center := CenterContainer.new()
 	add_child(center)
 	center.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
@@ -19,7 +25,15 @@ func _construir_ui() -> void:
 	var titulo := Label.new()
 	titulo.text = "Elegí tu clase"
 	titulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	titulo.add_theme_font_size_override("font_size", 32)
 	vbox.add_child(titulo)
+
+	var subtitulo := Label.new()
+	subtitulo.text = "Cada clase empuña su propia arma"
+	subtitulo.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	subtitulo.add_theme_font_size_override("font_size", 15)
+	subtitulo.add_theme_color_override("font_color", Color(0.7, 0.7, 0.75))
+	vbox.add_child(subtitulo)
 
 	var fila := HBoxContainer.new()
 	fila.alignment = BoxContainer.ALIGNMENT_CENTER
@@ -31,6 +45,7 @@ func _construir_ui() -> void:
 
 	var comenzar := Button.new()
 	comenzar.text = "Comenzar"
+	comenzar.custom_minimum_size = Vector2(200, 44)
 	comenzar.pressed.connect(_on_comenzar)
 	vbox.add_child(comenzar)
 

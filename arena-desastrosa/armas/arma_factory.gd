@@ -10,11 +10,13 @@ extends RefCounted
 enum TipoArma {
 	ESPADA,
 	BASTON_MAGICO,
+	EXPLOSION_FUEGO,
 }
 
 const ARMAS := {
 	TipoArma.ESPADA: preload("res://armas/espada.gd"),
 	TipoArma.BASTON_MAGICO: preload("res://armas/baston_magico.gd"),
+	TipoArma.EXPLOSION_FUEGO: preload("res://armas/explosion_fuego.gd"),
 }
 
 ## Crea y devuelve una instancia fresca del arma solicitada.

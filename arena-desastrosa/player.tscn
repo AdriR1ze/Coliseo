@@ -2,7 +2,11 @@
 
 [ext_resource type="Script" uid="uid://b44k0apfgls80" path="res://player.gd" id="1_4flbx"]
 [ext_resource type="Script" uid="uid://dsnlix81mppbn" path="res://models/character_model.gd" id="2_model"]
-[ext_resource type="PackedScene" path="res://models/character_model.glb" id="3_glb"]
+[ext_resource type="PackedScene" uid="uid://goc0tbmhwq2g" path="res://models/character_model.glb" id="3_glb"]
+[ext_resource type="Script" uid="uid://g3268bq2lmc0" path="res://components/health.gd" id="4_health"]
+[ext_resource type="Script" uid="uid://w4qgsjpri8fp" path="res://components/mouse_look.gd" id="5_mouse"]
+[ext_resource type="Script" uid="uid://c0mp0nentm0v" path="res://components/movement.gd" id="6_movement"]
+[ext_resource type="Script" path="res://components/habilidad_v.gd" id="7_habilidad"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_lyhwj"]
 radius = 0.4
@@ -15,7 +19,7 @@ script = ExtResource("1_4flbx")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
 shape = SubResource("CapsuleShape3D_lyhwj")
 
-[node name="CharacterModel" parent="." instance=ExtResource("3_glb")]
+[node name="CharacterModel" parent="." unique_id=688448496 instance=ExtResource("3_glb")]
 script = ExtResource("2_model")
 
 [node name="CameraPivot" type="Node3D" parent="." unique_id=699815565]
@@ -28,3 +32,20 @@ margin = 0.2
 [node name="Camera3D" type="Camera3D" parent="CameraPivot/SpringArm3D" unique_id=347187887]
 transform = Transform3D(-0.99970365, 0, 0.024345027, 0, 1, 0, -0.024345027, 0, -0.99970365, 0, 0, 0.2606417)
 current = true
+
+[node name="Health" type="Node" parent="." unique_id=328430335]
+script = ExtResource("4_health")
+
+[node name="MouseLook" type="Node" parent="." unique_id=453399698]
+script = ExtResource("5_mouse")
+pivot_path = NodePath("CameraPivot")
+
+[node name="Movement" type="Node" parent="." unique_id=20149893]
+script = ExtResource("6_movement")
+
+[node name="HabilidadV" type="Node" parent="." unique_id=74829103]
+script = ExtResource("7_habilidad")
+
+[node name="TimerCooldown" type="Timer" parent="HabilidadV" unique_id=74829104]
+wait_time = 10.0
+one_shot = true

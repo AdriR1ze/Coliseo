@@ -5,7 +5,7 @@ enum Clases {
 	MAGO,
 	ESPADACHIN,
 }
- 
+
 const CLASES := {
 	Clases.MAGO: preload("res://clases/mago.gd"),
 	Clases.ESPADACHIN: preload("res://clases/espadachin.gd"),

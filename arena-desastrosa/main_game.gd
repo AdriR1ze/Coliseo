@@ -6,12 +6,15 @@ const LEVEL_1 := preload("res://level_1.tscn")
 @onready var level_root: Node3D = %LevelRoot
 @onready var entity_root: Node3D = %EntityRoot
 @onready var hud: HUD = $HudLayer/HudRoot
+@onready var ability_slot: AbilitySlot = %AbilitySlot
 
 func _ready() -> void:
 	_setup_lighting()
 	_cargar_nivel.call_deferred(LEVEL_1)
 	var jugador := init_player()
 	hud.setup(jugador)
+	if ability_slot and jugador.habilidad_v:
+		ability_slot.setup(jugador.habilidad_v)
 	WaveManager.iniciar_oleada(entity_root, 1, 5)
 
 func _setup_lighting() -> void:

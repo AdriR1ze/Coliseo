@@ -3,36 +3,19 @@ extends CharacterBody3D
 
 signal died(enemy: Enemy)
 
-@export var speed: float = 1.5
-const JUMP_VELOCITY = 4.5
-
 var player: CharacterBody3D = null
-var health: Health = null
 var _is_dancing: bool = false
 var _is_dead: bool = false
 
+@onready var health: Health = $Health
+@onready var movement: Movement = $Movement
 @onready var character_model: CharacterModel = $CharacterModel
 
 func _ready() -> void:
-	add_to_group("enemies")
-	add_to_group("dancers")
-	
-	health = Health.new()
-	health.max_health = 30
-	add_child(health)
 	health.died.connect(_on_died)
-	
-	_setup_contact_damage()
 	if character_model:
 		character_model.play_idle()
 	_find_nearest_player()
-
-func _setup_contact_damage() -> void:
-	var contacto := ContactDamage.new()
-	contacto.damage = 10
-	contacto.cooldown = 1.0
-	contacto.attack_range = 1.5
-	add_child(contacto)
 
 func bailar() -> void:
 	if _is_dead:
@@ -49,7 +32,8 @@ func _on_died() -> void:
 		return
 	_is_dead = true
 	_is_dancing = false
-	velocity = Vector3.ZERO
+	movement.detener()
+	movement.active = false
 	if character_model:
 		character_model.play_dead()
 	died.emit(self)
@@ -73,28 +57,21 @@ func _find_nearest_player() -> void:
 				min_dist = dist
 				player = p
 
-func _physics_process(delta: float) -> void:
+func _physics_process(_delta: float) -> void:
 	if _is_dead:
 		return
 
-	if not is_on_floor():
-		velocity += get_gravity() * delta
-
 	if _is_dancing:
-		velocity.x = move_toward(velocity.x, 0, speed)
-		velocity.z = move_toward(velocity.z, 0, speed)
-		move_and_slide()
+		movement.frenar()
 		return
 
 	if player == null or not is_instance_valid(player) or not player.is_in_group("player") or player.get("_is_dead") == true:
 		player = null
 		_find_nearest_player()
 		if player == null:
-			velocity.x = move_toward(velocity.x, 0, speed)
-			velocity.z = move_toward(velocity.z, 0, speed)
+			movement.frenar()
 			if character_model:
 				character_model.play_idle()
-			move_and_slide()
 			return
 
 	var diff := player.global_position - global_position
@@ -103,14 +80,10 @@ func _physics_process(delta: float) -> void:
 	if flat.length() > 0.3:
 		var dir := flat.normalized()
 		look_at(global_position - flat, Vector3.UP)
-		velocity.x = dir.x * speed
-		velocity.z = dir.z * speed
+		movement.mover(dir)
 		if character_model:
 			character_model.play_walk()
 	else:
-		velocity.x = 0
-		velocity.z = 0
+		movement.frenar()
 		if character_model:
 			character_model.play_idle()
-
-	move_and_slide()

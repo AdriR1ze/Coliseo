@@ -3,6 +3,9 @@
 [ext_resource type="Script" uid="uid://32x3iyvtv7cm" path="res://enemy.gd" id="1_7k104"]
 [ext_resource type="Script" uid="uid://dsnlix81mppbn" path="res://models/character_model.gd" id="2_model"]
 [ext_resource type="PackedScene" path="res://models/character_model.glb" id="3_glb"]
+[ext_resource type="Script" uid="uid://g3268bq2lmc0" path="res://components/health.gd" id="4_health"]
+[ext_resource type="Script" uid="uid://evjqwwa4kfql" path="res://components/contact_damage.gd" id="5_contact"]
+[ext_resource type="Script" uid="uid://c0mp0nentm0v" path="res://components/movement.gd" id="6_movement"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_o2tjt"]
 radius = 0.4
@@ -17,3 +20,17 @@ shape = SubResource("CapsuleShape3D_o2tjt")
 
 [node name="CharacterModel" parent="." instance=ExtResource("3_glb")]
 script = ExtResource("2_model")
+
+[node name="Movement" type="Node" parent="."]
+script = ExtResource("6_movement")
+speed = 1.5
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource("4_health")
+max_health = 30
+
+[node name="ContactDamage" type="Node" parent="."]
+script = ExtResource("5_contact")
+damage = 10
+cooldown = 1.0
+attack_range = 1.5

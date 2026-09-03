@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dtf0a4t41wy2q" path="res://main_game.gd" id="1"]
 [ext_resource type="Script" uid="uid://dprl5b6hos5t7" path="res://ui/hud.gd" id="2"]
+[ext_resource type="PackedScene" uid="uid://b0yv8n3m7k2pq" path="res://ui/ability_slot.tscn" id="3_ability"]
 
 [node name="MainGame" type="Node" unique_id=332859586]
 script = ExtResource("1")
@@ -27,3 +28,6 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("2")
+
+[node name="AbilitySlot" parent="HudLayer" unique_id=987162534 instance=ExtResource("3_ability")]
+unique_name_in_owner = true

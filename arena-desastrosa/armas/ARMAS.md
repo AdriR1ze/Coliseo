@@ -3,7 +3,8 @@
 ```
 BaseArma (Node3D)
     ├── Espada
-    └── BastonMagico
+    ├── BastonMagico
+    └── ExplosionFuego          ← AoE circular de fuego desde el centro
 
 DecoradorArma (extends BaseArma)   ← wraps any BaseArma
     ├── DecoradorVeneno             ← ejemplo: DoT de veneno
