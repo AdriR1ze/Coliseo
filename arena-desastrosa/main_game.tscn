@@ -1,8 +1,10 @@
 [gd_scene format=3 uid="uid://cm77j5msernhq"]
 
 [ext_resource type="Script" uid="uid://dtf0a4t41wy2q" path="res://main_game.gd" id="1"]
-[ext_resource type="Script" uid="uid://dprl5b6hos5t7" path="res://ui/hud.gd" id="2"]
 [ext_resource type="PackedScene" uid="uid://b0yv8n3m7k2pq" path="res://ui/ability_slot.tscn" id="3_ability"]
+[ext_resource type="PackedScene" path="res://ui/crosshair.tscn" id="4_cross"]
+[ext_resource type="PackedScene" path="res://ui/item_choice.tscn" id="5_item"]
+[ext_resource type="PackedScene" path="res://ui/hud/hud.tscn" id="9_hud"]
 
 [node name="MainGame" type="Node" unique_id=332859586]
 script = ExtResource("1")
@@ -20,14 +22,19 @@ unique_name_in_owner = true
 
 [node name="HudLayer" type="CanvasLayer" parent="." unique_id=2006265395]
 
-[node name="HudRoot" type="Control" parent="HudLayer" unique_id=412379008]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-script = ExtResource("2")
+[node name="HudRoot" parent="HudLayer" instance=ExtResource("9_hud")]
 
-[node name="AbilitySlot" parent="HudLayer" unique_id=987162534 instance=ExtResource("3_ability")]
-unique_name_in_owner = true
+[node name="AbilitySlot" parent="HudLayer" instance=ExtResource("3_ability")]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -76.0
+offset_right = 96.0
+offset_bottom = -8.0
+grow_vertical = 0
+
+[node name="Crosshair" parent="HudLayer" instance=ExtResource("4_cross")]
+
+[node name="ItemChoice" parent="HudLayer" instance=ExtResource("5_item")]

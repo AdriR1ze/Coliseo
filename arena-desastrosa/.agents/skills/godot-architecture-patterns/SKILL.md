@@ -9,6 +9,25 @@ Este documento define las reglas de diseño y arquitectura obligatorias para el 
 
 ---
 
+## 0. Regla de Oro: Separar la UI
+
+**SIEMPRE separar la interfaz de usuario en escenas `.tscn` y componentes independientes.** Nunca dejar toda la UI junta en un solo script o escena monolítica.
+
+- Cada pieza de UI (barra de vida, barra de energía, panel de oleada, slots, botones, pantallas de menú/derrota/elección, etc.) debe ser **su propia escena `.tscn`** (componente), con su script mínimo que solo conecte señales y actualice datos.
+- Un orquestador (ej. `hud.tscn`) arma los componentes en el layout final; el orquestador no construye los elementos por código, solo los posiciona/instancia y los conecta.
+- Estructura de referencia en `ui/`:
+  ```
+  ui/hud/health_bar.tscn        ui/hud/power_bar.tscn
+  ui/hud/wave_panel.tscn        ui/hud/gold_bar.tscn
+  ui/hud/action_slots.tscn      ui/hud/control_buttons.tscn
+  ui/hud/defeat_panel.tscn      ui/hud/hud.tscn  (orquesta)
+  ui/menu/menu_button.tscn      ui/menu/main_menu.tscn
+  ```
+- Motivo: cada parte se puede editar, estilizar, reutilizar y testear por separado, y los cambios de una no rompen el resto.
+- Prohibido: un script de UI gigante que instancie `Label.new()`, `Button.new()`, `ProgressBar.new()` con posiciones a mano para toda la interfaz.
+
+---
+
 ## 1. Patrones de Diseño y Consulta Obligatoria
 
 1. **Mentalidad orientada a Patrones de Diseño**:
@@ -65,11 +84,69 @@ Este documento define las reglas de diseño y arquitectura obligatorias para el 
 
 ---
 
+## 3.1 Toda Feature Debe Incluir Su UI Necesaria
+
+- **Regla**: Al agregar o modificar una feature, implementar siempre la interfaz de usuario necesaria para que el jugador pueda verla y usarla. Una feature sin su UI queda incompleta.
+- Implica:
+  - Nuevo dato visible (nivel, estadísticas, puntos, cooldowns) → mostrarlo en el HUD o en la pantalla correspondiente.
+  - Nueva decisión/interacción del jugador (elegir mejora, comprar, confirmar) → crear la pantalla o controles (`.tscn`) necesarios.
+  - Nueva acción o estado → reflejarlo visualmente (feedback, transiciones, visibilidad).
+- La UI de cada feature debe construirse como **escena `.tscn`** (ver sección 3) y su script solo debe conectar señales y actualizar datos dinámicos.
+
+---
+
+## 3.2 Revisar Todo lo Implementado Antes de Dar el OK
+
+**NUNCA** dar una tarea por terminada sin haber revisado y verificado TODO lo que se implementó. Una respuesta que dice "`listo`" sin revisar es una respuesta incompleta.
+
+Proceso obligatorio antes de comunicar el OK al usuario:
+
+1. **Verificar referencias y rutas**:
+   - Que en los `.tscn` no haya `ext_resource` apuntando a rutas inexistentes.
+   - Que los `preload()` existan (archivos `.gd`, `.tscn`, texturas).
+   - Que los nombres de escenas/nodos referenciados por `@onready` y `$`/`%` coincidan exactamente con el árbol (mayúsculas, `_`, rutas de nodos anidados).
+
+2. **Revisar señales conectadas**:
+   - Que cada `signal` referenciada exista (y con la misma aridad/tipos).
+   - Que no haya conexiones duplicadas o `connect` a métodos que ya no existen (por refactor).
+
+3. **Confirmar que no quedaron referencias muertas**:
+   - Tras mover/renombrar archivos (ej. `hud.gd`), buscar y eliminar cualquier `@onready`, `preload`, `extends`, `load()` o `change_scene_to_file` que apunte a la ruta vieja.
+
+4. **Revisar que los `class_name` no dupliquen**:
+   - Al crear/reemplazar scripts, confirmar que no hay dos scripts con el mismo `class_name` (duplicados rompen la carga de todo el proyecto).
+
+5. **Revisar la jerarquía y el layout real de la UI**:
+   - Verificar los `layout_mode`, `anchors_preset` y `offset_*` de cada Control instanciado (especialmente hijos directos de `CanvasLayer`) para que se posicionen y mantengan tamaño correcto.
+   - Confirmar que cada ruta usada por el script del control (ej. `$Root/Margin/Label`) exista en su escena.
+
+6. **Revisar ganancias/propiedades exportadas y datos**:
+   - Que las `@export` existan en la clase correcta y que los datos leídos de señales/managers existan (ej. `ClassManager.experiencia_actualizada`, `nivel_subido`).
+
+7. **Revisar los escenarios de flujo**:
+   - Flujo de pantallas (menú → selección → combate → derrota → reintento).
+   - Flujo de oleadas y de pausa/elección de items (que al pausar no queden nodos sin `process_mode` adecuado).
+
+8. **Intentar validar el proyecto**:
+   - Si hay un ejecutable de Godot disponible, correr el proyecto en headless o abrirlo y chequear que no haya errores de parseo ni de recursos faltantes. Si no se puede, avisar explícitamente al usuario que la validación queda pendiente.
+
+> Regla de oro: si el resultado no está verificado, o hay dudas de que compile/cargue y se vea bien, **no dar el OK**. Decir exactamente qué se revisó y qué quedó sin validar.
+
+---
+
 ## 4. Checklist de Verificación para el Agente
 
 Antes de dar por concluida una respuesta o realizar cambios:
+- [ ] ¿Revisé todas las referencias (rutas, `preload`, `extends`, `$`/`%`, `@onready`) y coinciden con los archivos/árbol?
+- [ ] ¿Revisé señales conectadas (existen, con la misma firma, sin conexiones duplicadas)?
+- [ ] ¿Eliminé referencias muertas tras mover/renombrar archivos?
+- [ ] ¿Confirmé que no hay `class_name` duplicados?
+- [ ] ¿Revisé layout/anclas/offsets de los nodos de UI y las rutas internas de cada escena?
+- [ ] ¿Repasé los flujos (pantallas, oleadas, pausa/items, derrota/reintento)?
+- [ ] ¿Intenté validar el proyecto (Godot headless/editor)? Si no pude, ¿lo dije explícitamente al usuario?
 - [ ] ¿He revisado si la solución aplica un patrón de diseño adecuado?
 - [ ] Si considero conveniente agregar o cambiar un patrón de diseño, ¿he consultado y obtenido la aprobación del usuario primero?
 - [ ] ¿Estoy utilizando componentes para modularizar y desacoplar la lógica en lugar de inflar una sola clase?
 - [ ] ¿La UI o jerarquía está modelada en el archivo de escena `.tscn` y no generada con `.new()` / `add_child()` en código?
 - [ ] ¿La lógica que puede resolverse mediante nodos nativos (como `Timer`) está en el árbol de la escena?
+- [ ] ¿La feature incluye la UI necesaria (HUD, pantalla de elección, feedback visual) para poder verse y usarse?

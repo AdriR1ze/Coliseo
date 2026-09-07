@@ -6,11 +6,14 @@
 [ext_resource type="Script" uid="uid://g3268bq2lmc0" path="res://components/health.gd" id="4_health"]
 [ext_resource type="Script" uid="uid://w4qgsjpri8fp" path="res://components/mouse_look.gd" id="5_mouse"]
 [ext_resource type="Script" uid="uid://c0mp0nentm0v" path="res://components/movement.gd" id="6_movement"]
-[ext_resource type="Script" uid="uid://ryhlp1fqotot" path="res://components/habilidad_v.gd" id="7_habilidad"]
+[ext_resource type="Script" path="res://components/habilidad_v.gd" id="7_habilidad"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_lyhwj"]
 radius = 0.4
 height = 1.8
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_zona_segura"]
+radius = 6.0
 
 [node name="Player" type="CharacterBody3D" unique_id=1195226243 groups=["dancers", "player"]]
 script = ExtResource("1_4flbx")
@@ -50,33 +53,9 @@ script = ExtResource("7_habilidad")
 wait_time = 10.0
 one_shot = true
 
-[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1349441220]
+[node name="ZonaSegura" type="Area3D" parent="."]
+monitorable = false
+monitoring = false
 
-[node name="Control" type="Control" parent="CanvasLayer" unique_id=155047610]
-layout_mode = 3
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -20.0
-offset_top = -20.0
-offset_right = 20.0
-offset_bottom = 20.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-
-[node name="ColorRect2" type="ColorRect" parent="CanvasLayer/Control" unique_id=1529679120]
-layout_mode = 0
-offset_left = -1.0
-offset_top = -9.0
-offset_right = 1.0
-offset_bottom = 9.0
-
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer/Control" unique_id=1835134221]
-layout_mode = 0
-offset_left = -9.0
-offset_top = -1.0
-offset_right = 9.0
-offset_bottom = 1.0
+[node name="CollisionShape3D" type="CollisionShape3D" parent="ZonaSegura"]
+shape = SubResource("SphereShape3D_zona_segura")

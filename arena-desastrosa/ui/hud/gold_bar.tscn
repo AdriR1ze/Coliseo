@@ -1,0 +1,62 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/hud/gold_bar.gd" id="1_script"]
+[ext_resource type="Texture2D" path="res://ui/gemini-2.5-flash-image_Create_a_complete_2D_game_HUD_asset_sheet_for_a_polished_dark_fantasy_arena_rogu-0.jpg" id="2_sheet"]
+
+[sub_resource type="AtlasTexture" id="atlas_coin"]
+atlas = ExtResource("2_sheet")
+region = Rect2(804, 122, 84, 84)
+
+[sub_resource type="StyleBoxFlat" id="style_pill"]
+bg_color = Color(0.07, 0.07, 0.11, 0.92)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.55, 0.42, 0.15, 0.95)
+corner_radius_top_left = 12
+corner_radius_top_right = 12
+corner_radius_bottom_right = 12
+corner_radius_bottom_left = 12
+
+[node name="GoldBar" type="Control"]
+custom_minimum_size = Vector2(120, 30)
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+script = ExtResource("1_script")
+
+[node name="Root" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/separation = 6
+
+[node name="Pill" type="PanelContainer" parent="Root"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/panel = SubResource("style_pill")
+
+[node name="PillInner" type="HBoxContainer" parent="Root/Pill"]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="Coin" type="TextureRect" parent="Root/Pill/PillInner"]
+custom_minimum_size = Vector2(22, 22)
+layout_mode = 2
+mouse_filter = 2
+texture = SubResource("atlas_coin")
+expand_mode = 1
+stretch_mode = 5
+
+[node name="Value" type="Label" parent="Root/Pill/PillInner"]
+layout_mode = 2
+mouse_filter = 2
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(1, 0.9, 0.6, 1)
+text = "0"
+vertical_alignment = 1

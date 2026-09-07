@@ -1,0 +1,56 @@
+[gd_scene format=3]
+
+[sub_resource type="StyleBoxFlat" id="btn_normal"]
+bg_color = Color(0.09, 0.09, 0.13, 0.92)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.5, 0.4, 0.2, 0.9)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[sub_resource type="StyleBoxFlat" id="btn_hover"]
+bg_color = Color(0.16, 0.15, 0.2, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.9, 0.75, 0.35, 1)
+corner_radius_top_left = 10
+corner_radius_top_right = 10
+corner_radius_bottom_right = 10
+corner_radius_bottom_left = 10
+
+[node name="ControlButtons" type="HBoxContainer"]
+layout_mode = 3
+anchors_preset = 0
+mouse_filter = 2
+theme_override_constants/separation = 10
+alignment = 2
+
+[node name="Ajustes" type="Button" parent="."]
+custom_minimum_size = Vector2(46, 46)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/normal = SubResource("btn_normal")
+theme_override_styles/hover = SubResource("btn_hover")
+theme_override_styles/pressed = SubResource("btn_normal")
+
+[node name="Pausa" type="Button" parent="."]
+custom_minimum_size = Vector2(46, 46)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/normal = SubResource("btn_normal")
+theme_override_styles/hover = SubResource("btn_hover")
+theme_override_styles/pressed = SubResource("btn_normal")
+
+[node name="Oro" type="Button" parent="."]
+custom_minimum_size = Vector2(46, 46)
+layout_mode = 2
+mouse_filter = 2
+theme_override_styles/normal = SubResource("btn_normal")
+theme_override_styles/hover = SubResource("btn_hover")
+theme_override_styles/pressed = SubResource("btn_normal")

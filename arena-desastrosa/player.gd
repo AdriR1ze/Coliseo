@@ -80,9 +80,26 @@ func take_damage(amount: int) -> void:
 
 func _obtener_direccion_ataque() -> Vector3:
 	var camera := get_viewport().get_camera_3d()
-	if camera:
-		return -camera.global_transform.basis.z.normalized()
-	return -global_transform.basis.z.normalized()
+	if camera == null:
+		return -global_transform.basis.z.normalized()
+	var centro := get_viewport().get_visible_rect().size * 0.5
+	var origen_rayo := camera.project_ray_origin(centro)
+	var dir_rayo := camera.project_ray_normal(centro)
+	var punto_objetivo := _obtener_punto_en_mira(origen_rayo, dir_rayo)
+	var origen_disparo := global_position + Vector3(0, 1.2, 0)
+	var dir := punto_objetivo - origen_disparo
+	if dir.is_zero_approx():
+		return dir_rayo
+	return dir.normalized()
+
+func _obtener_punto_en_mira(origen: Vector3, dir: Vector3) -> Vector3:
+	var espacio := get_world_3d().direct_space_state
+	var consulta := PhysicsRayQueryParameters3D.create(origen, origen + dir * 100.0)
+	consulta.exclude = [get_rid()]
+	var resultado := espacio.intersect_ray(consulta)
+	if resultado:
+		return resultado.position
+	return origen + dir * 30.0
 
 func _intentar_atacar() -> void:
 	if _is_dead or arma == null:

@@ -1,0 +1,93 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://ui/hud/hud.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://ui/hud/health_bar.tscn" id="2_health"]
+[ext_resource type="PackedScene" path="res://ui/hud/power_bar.tscn" id="3_power"]
+[ext_resource type="PackedScene" path="res://ui/hud/gold_bar.tscn" id="4_gold"]
+[ext_resource type="PackedScene" path="res://ui/hud/wave_panel.tscn" id="5_wave"]
+[ext_resource type="PackedScene" path="res://ui/hud/action_slots.tscn" id="6_slots"]
+[ext_resource type="PackedScene" path="res://ui/hud/control_buttons.tscn" id="7_buttons"]
+[ext_resource type="PackedScene" path="res://ui/hud/defeat_panel.tscn" id="8_defeat"]
+
+[node name="HUD" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_script")
+
+[node name="HealthBar" parent="." instance=ExtResource("2_health")]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 16.0
+offset_top = 14.0
+offset_right = 260.0
+offset_bottom = 44.0
+
+[node name="PowerBar" parent="." instance=ExtResource("3_power")]
+layout_mode = 1
+anchors_preset = 0
+offset_left = 16.0
+offset_top = 50.0
+offset_right = 220.0
+offset_bottom = 78.0
+
+[node name="GoldBar" parent="." instance=ExtResource("4_gold")]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -150.0
+offset_top = 14.0
+offset_right = -16.0
+offset_bottom = 44.0
+
+[node name="WavePanel" parent="." instance=ExtResource("5_wave")]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -90.0
+offset_top = 22.0
+offset_right = 90.0
+offset_bottom = 78.0
+grow_horizontal = 2
+
+[node name="ActionSlots" parent="." instance=ExtResource("6_slots")]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = -162.0
+offset_top = -150.0
+offset_right = 162.0
+offset_bottom = -80.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="ControlButtons" parent="." instance=ExtResource("7_buttons")]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -172.0
+offset_top = -68.0
+offset_right = -20.0
+offset_bottom = -22.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="DefeatPanel" parent="." instance=ExtResource("8_defeat")]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2

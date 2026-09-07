@@ -7,6 +7,11 @@ extends Resource
 ## Tipo de arma base de esta clase. El Factory Method la instancia en crear_arma().
 @export var tipo_arma: ArmaFactory.TipoArma = ArmaFactory.TipoArma.ESPADA
 
+## Progresión de nivel de la clase (solo informativa por ahora).
+var nivel: int = 1
+var experiencia: int = 0
+var experiencia_umbral: int = 5
+
 ## Factory Method: crea y devuelve el arma base de esta clase.
 ## Para aplicar decoradores, la subclase puede sobreescribir este método
 ## y envolver el arma antes de devolverla. Ejemplo:

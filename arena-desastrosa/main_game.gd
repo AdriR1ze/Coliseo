@@ -3,19 +3,48 @@ extends Node
 const PLAYER_SCENE := preload("res://player.tscn")
 const LEVEL_1 := preload("res://level_1.tscn")
 
+const ENEMIGOS_BASE := 5
+const ENEMIGOS_POR_OLA := 2
+
 @onready var level_root: Node3D = %LevelRoot
 @onready var entity_root: Node3D = %EntityRoot
 @onready var hud: HUD = $HudLayer/HudRoot
-@onready var ability_slot: AbilitySlot = %AbilitySlot
+@onready var ability_slot: AbilitySlot = $HudLayer/AbilitySlot
+@onready var item_choice: ItemChoice = $HudLayer/ItemChoice
+
+var oleada_numero: int = 0
+var jugador: Player = null
 
 func _ready() -> void:
 	_setup_lighting()
 	_cargar_nivel.call_deferred(LEVEL_1)
-	var jugador := init_player()
+	jugador = init_player()
 	hud.setup(jugador)
 	if ability_slot and jugador.habilidad_v:
 		ability_slot.setup(jugador.habilidad_v)
-	WaveManager.iniciar_oleada(entity_root, 1, 5)
+	WaveManager.oleada_terminada.connect(_on_oleada_terminada)
+	WaveManager.enemigo_eliminado_total.connect(_on_enemigo_eliminado)
+	item_choice.item_elegido.connect(_on_item_elegido)
+	_iniciar_siguiente_oleada()
+
+func _iniciar_siguiente_oleada() -> void:
+	oleada_numero += 1
+	hud.set_wave(oleada_numero)
+	var cantidad := ENEMIGOS_BASE + (oleada_numero - 1) * ENEMIGOS_POR_OLA
+	WaveManager.iniciar_oleada(entity_root, oleada_numero, cantidad)
+
+func _on_oleada_terminada(_numero: int) -> void:
+	item_choice.mostrar(ItemFactory.obtener_tres_aleatorios())
+
+func _on_item_elegido(item: Item) -> void:
+	if item and jugador:
+		item.aplicar(jugador)
+		hud.refrescar(jugador)
+	_iniciar_siguiente_oleada()
+
+func _on_enemigo_eliminado(_total: int) -> void:
+	if jugador:
+		ClassManager.subir_experiencia(jugador, 1)
 
 func _setup_lighting() -> void:
 	var world := $World

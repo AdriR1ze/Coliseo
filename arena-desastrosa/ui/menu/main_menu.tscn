@@ -1,0 +1,80 @@
+[gd_scene format=3 uid="uid://d0vk7d0l67oxe"]
+
+[ext_resource type="Script" uid="uid://bk2obcunfcy6l" path="res://ui/menu/main_menu.gd" id="1_script"]
+[ext_resource type="PackedScene" path="res://ui/menu/menu_button.tscn" id="2_button"]
+
+[node name="MainMenu" type="Control" unique_id=1745342367]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_script")
+
+[node name="Fondo" type="ColorRect" parent="." unique_id=1405131044]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+color = Color(0.02, 0.02, 0.02, 1)
+
+[node name="Center" type="CenterContainer" parent="." unique_id=621838550]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+
+[node name="VBox" type="VBoxContainer" parent="Center" unique_id=556865449]
+layout_mode = 2
+mouse_filter = 2
+theme_override_constants/separation = 8
+alignment = 1
+
+[node name="Titulo" type="Label" parent="Center/VBox" unique_id=392594853]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.8, 0.55, 1)
+theme_override_font_sizes/font_size = 42
+text = "ARENA DESASTROSA"
+horizontal_alignment = 1
+
+[node name="Play" parent="Center/VBox" unique_id=234093609 instance=ExtResource("2_button")]
+unique_name_in_owner = true
+layout_mode = 2
+text = "PLAY"
+
+[node name="Classes" parent="Center/VBox" unique_id=382212648 instance=ExtResource("2_button")]
+unique_name_in_owner = true
+layout_mode = 2
+text = "CLASSES"
+
+[node name="Upgrades" parent="Center/VBox" unique_id=950788716 instance=ExtResource("2_button")]
+layout_mode = 2
+text = "UPGRADES"
+
+[node name="Codex" parent="Center/VBox" unique_id=1317992405 instance=ExtResource("2_button")]
+layout_mode = 2
+text = "CODEX"
+
+[node name="Settings" parent="Center/VBox" unique_id=2091425137 instance=ExtResource("2_button")]
+layout_mode = 2
+text = "SETTINGS"
+
+[node name="Achievements" parent="Center/VBox" unique_id=1575022295 instance=ExtResource("2_button")]
+layout_mode = 2
+text = "ACHIEVEMENTS"
+
+[node name="Credits" parent="Center/VBox" unique_id=124081136 instance=ExtResource("2_button")]
+layout_mode = 2
+text = "CREDITS"
+
+[node name="Exit" parent="Center/VBox" unique_id=763191271 instance=ExtResource("2_button")]
+unique_name_in_owner = true
+layout_mode = 2
+text = "EXIT"
